@@ -2,6 +2,7 @@ from joblib import load
 import os
 import pandas as pd
 import numpy as np
+from itertools import product
 
 from mvmm.multi_view.block_diag.graph.bipt_community import community_summary
 
@@ -15,8 +16,11 @@ from mvmm.clustering_measures import MEASURE_MIN_GOOD
 
 def load_results(sim_name, select_metric='bic'):
     """
+    Loads the
     Parameters
     -----------
+    sim_name: str
+        Name of the simulation.
 
     select_metric: str
         Used to pick the best model if there are ties for log_pen_mvmm_at_truth.
@@ -358,18 +362,10 @@ def get_timing_data(results, fit_models):
     return data
 
 
-# def add_bic_aic_sel(model_df):
-#     for _, df in model_df.groupby(['n_samples', 'mc_index']):
-#         for ic in ['bic', 'aic']:
-
-#             best_pd_idx = df[ic].idxmin()
-#             best_tune_idx = df.loc[best_pd_idx]['tune_idx']
-#             model_df.loc[df.index, ic + '_best_tune_idx'] = best_tune_idx
-
-#     return model_df
-
-
 def add_model_selection_by_measures(df):
+    """
+    Get the selected model for each model selection measure.
+    """
     # make sure only one experiment is in this df
     assert len(np.unique(df['model'])) == 1
     assert len(np.unique(df['dataset'])) == 1
@@ -383,14 +379,24 @@ def add_model_selection_by_measures(df):
         if select_metric in df.columns:
             model_sel_measures.append(select_metric)
 
+    all_mc_idxs = set(df['mc_index'])
+    all_n_samples = set(df['n_samples'])
+
     # do model selection for each measure
     for sel_measure in model_sel_measures:
-        if MEASURE_MIN_GOOD[sel_measure]:
-            best_pd_idx = df[sel_measure].idxmin()
-        else:
-            best_pd_idx = df[sel_measure].idxmax()
+        df['{}_best_tune_idx'.format(sel_measure)] = None
+        for mc_index, n_samples in product(all_mc_idxs, all_n_samples):
+            exper_df = df.\
+                query("mc_index == @mc_index").\
+                query("n_samples == @n_samples")
 
-        best_tune_idx = df.loc[best_pd_idx]['tune_idx']
-        df['{}_best_tune_idx'.format(sel_measure)] = best_tune_idx
+            if MEASURE_MIN_GOOD[sel_measure]:
+                best_pd_idx = exper_df[sel_measure].idxmin()
+            else:
+                best_pd_idx = exper_df[sel_measure].idxmax()
+
+            best_tune_idx = exper_df.loc[best_pd_idx]['tune_idx']
+            df.loc[exper_df.index,
+                   '{}_best_tune_idx'.format(sel_measure)] = best_tune_idx
 
     return df
