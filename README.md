@@ -8,7 +8,7 @@ The code in this repository reproduces the results of [(Carmichael, 2020)](TODO:
 To run all the simulations do the following (note you have to write in a couple hard coded paths for where simulation output data should be saved!)
 
 ```
-git clone https://github.com/idc9/mvmm_sim@SOMETAGE
+git clone https://github.com/idc9/mvmm_sim@SOMETAG
 
 # change paths in mvmm_sim/simulation/Paths.py
 
