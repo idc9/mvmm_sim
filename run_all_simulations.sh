@@ -9,7 +9,7 @@
 
 # conda environment
 conda create -n repro_mvmm python=3.6
-source activate repro_mvmm
+conda activate repro_mvmm
 
 pip install .
 
