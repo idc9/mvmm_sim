@@ -83,7 +83,7 @@ def run_sim_from_configs(clust_param_config, grid_means, pi_dist, pi_config,
         [get_n_comp_seq(n_view_components[v], gmm_pm) for v in range(2)]
 
     # n block sequence to search over
-    lbd = max(2, n_blocks_true - n_blocks_pm)
+    lbd = max(1, n_blocks_true - n_blocks_pm)
     ubd = min(n_blocks_true + n_blocks_pm, min(n_view_components))
     nb_seq = np.arange(lbd, ubd + 1)
 

@@ -159,7 +159,7 @@ def get_mvmms(n_view_components,
         else:
 
             if type(n_blocks) == str and n_blocks == 'default':
-                n_blocks = np.arange(2, min(n_view_components) + 1)
+                n_blocks = np.arange(1, min(n_view_components) + 1)
 
             bd_mvmm = MVMMGridSearch(base_estimator=bd_mvmm,
                                      param_grid={'n_blocks': n_blocks},
