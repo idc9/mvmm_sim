@@ -360,7 +360,7 @@ for select_metric, measure in \
 tune_measures = ['test_overall_ars',
                  'test_community_ars', 'test_community_restr_ars',
                  'pi_aligned_dist',
-                 'n_blocks_est', 'n_comp_est', 'fit_time', 'bic', 'aic']
+                 'n_blocks_est', 'n_comp_est', 'fit_time']
 
 for (measure, model), group_var in \
         product(measure_model_tune_iter(tune_measures, models2exclude),
@@ -433,6 +433,54 @@ for (measure, model), group_var in \
     save_fig(join(results_save_dir, model,
                   'tune_{}_vs_{}.png'.format(group_var, measure)))
 
+#########################
+# Plot model sel curves #
+#########################
+for select_measure, model in product(['bic', 'aic'], ['bd_mvmm',
+                                                      'log_pen_mvmm',
+                                                      'cat_gmm']):
+
+    if model in models2exclude:
+        continue
+
+    elif model == 'bd_mvmm':
+        tune_param = 'n_blocks_est'
+        true_val = n_blocks_true
+
+    elif model in ['log_pen_mvmm', 'cat_gmm']:
+        tune_param = 'n_comp_est'
+        true_val = n_comp_tot_true
+
+    df = model_dfs[model]
+
+    all_mc_idxs = set(df['mc_index'])
+    all_n_samples = set(df['n_samples'])
+
+    for n_samples in all_n_samples:
+        plt.figure(figsize=[inches, inches])
+        for mc_index in all_mc_idxs:
+
+            exper_df = df.query("n_samples == @n_samples").\
+                query("mc_index == @mc_index")
+            plt.plot(exper_df['n_blocks_est'], exper_df['bic'],
+                     marker='.', color='black')
+            plt.ylabel(measure_labels[select_measure])
+            plt.xlabel(tune_param_labels[tune_param])
+
+            best_idx = exper_df['bic_best_tune_idx'].values[0]
+            best_val = exper_df.\
+                query("tune_idx == @best_idx")[tune_param].values[0]
+            plt.axvline(best_val, color='black')
+
+        plt.axvline(true_val, label="Truth {}".format(true_val),
+                    color='red', ls='--')
+        plt.legend()
+
+        save_fig(join(results_save_dir, model,
+                      '{}_model_selection_n={}.png'.format(select_measure,
+                                                           n_samples)))
+
+1 / 0
 ##############################
 # tune grid, start vs. final #
 ##############################
