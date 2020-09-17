@@ -11,7 +11,7 @@ from mvmm_sim.data_analysis.multi_view.model_selection import \
 from mvmm_sim.data_analysis.multi_view.viz_resuls import plot_mvmm, \
     plot_bd_mvmm, plot_log_pen_mvmm, plot_mvmm_model_selection
 
-from mvmm.multi_view.TwoStage import TwoStage
+# from mvmm.multi_view.TwoStage import TwoStage
 
 from mvmm_sim.data_analysis.utils import load_fitted_mvmms
 # from mvmm.simulation.opt_viz import plot_loss_history
@@ -115,27 +115,27 @@ if include_bd_mvmm:
         save_fig(join(bd_sel_dir, 'bd_mvmm_model_sel_{}.png'.format(metric)))
 
     # fitting history
-    if isinstance(estimator, TwoStage):
+    # if isinstance(estimator, TwoStage):
 
-        if estimator.start_.max_n_steps > 0:
-            bd_start_save_dir = make_and_get_dir(opt_diag_dir,
-                                                 'bd_mvmm', 'start')
-            bd_final_save_dir = make_and_get_dir(opt_diag_dir,
-                                                 'bd_mvmm', 'final')
+    if estimator.start_.max_n_steps > 0:
+        bd_start_save_dir = make_and_get_dir(opt_diag_dir,
+                                             'bd_mvmm', 'start')
+        bd_final_save_dir = make_and_get_dir(opt_diag_dir,
+                                             'bd_mvmm', 'final')
 
-            plot_mvmm(estimator.start_, inches=inches,
-                      save_dir=bd_start_save_dir)
-
-        else:
-            bd_final_save_dir = make_and_get_dir(opt_diag_dir, 'bd_mvmm')
-
-        plot_bd_mvmm(estimator.final_, inches=inches,
-                     save_dir=bd_final_save_dir)
-        # plot_bd_mvmm_opt_history(estimator=estimator, save_dir=opt_diag_dir)
+        plot_mvmm(estimator.start_, inches=inches,
+                  save_dir=bd_start_save_dir)
 
     else:
-        bd_save_dir = make_and_get_dir(opt_diag_dir, 'bd_mvmm')
-        plot_mvmm(estimator, inches=inches, save_dir=bd_save_dir)
+        bd_final_save_dir = make_and_get_dir(opt_diag_dir, 'bd_mvmm')
+
+    plot_bd_mvmm(estimator.final_, inches=inches,
+                 save_dir=bd_final_save_dir)
+    # plot_bd_mvmm_opt_history(estimator=estimator, save_dir=opt_diag_dir)
+
+    # else:
+    #     bd_save_dir = make_and_get_dir(opt_diag_dir, 'bd_mvmm')
+    #     plot_mvmm(estimator, inches=inches, save_dir=bd_save_dir)
 
 #########################
 # log pen mvmm  results #
@@ -176,27 +176,27 @@ if include_lp_mvmm:
         save_fig(join(log_sel_dir, 'log_pen_model_sel_{}.png'.format(metric)))
 
     # fitting history
-    if isinstance(estimator, TwoStage):
+    # if isinstance(estimator, TwoStage):
 
-        if estimator.start_.max_n_steps > 0:
-            lp_start_save_dir = make_and_get_dir(opt_diag_dir,
-                                                 'log_pen_mvmm', 'start')
-            lp_final_save_dir = make_and_get_dir(opt_diag_dir,
-                                                 'log_pen_mvmm', 'final')
+    if estimator.start_.max_n_steps > 0:
+        lp_start_save_dir = make_and_get_dir(opt_diag_dir,
+                                             'log_pen_mvmm', 'start')
+        lp_final_save_dir = make_and_get_dir(opt_diag_dir,
+                                             'log_pen_mvmm', 'final')
 
-            plot_mvmm(estimator.start_, inches=inches,
-                      save_dir=lp_start_save_dir)
-
-        else:
-            lp_final_save_dir = make_and_get_dir(opt_diag_dir, 'log_pen_mvmm')
-
-        plot_log_pen_mvmm(estimator.final_, inches=inches,
-                          save_dir=lp_final_save_dir)
-        # plot_bd_mvmm_opt_history(estimator=estimator, save_dir=opt_diag_dir)
+        plot_mvmm(estimator.start_, inches=inches,
+                  save_dir=lp_start_save_dir)
 
     else:
-        lp_save_dir = make_and_get_dir(opt_diag_dir, 'log_pen_mvmm')
-        plot_mvmm(estimator, inches=inches, save_dir=lp_save_dir)
+        lp_final_save_dir = make_and_get_dir(opt_diag_dir, 'log_pen_mvmm')
+
+    plot_log_pen_mvmm(estimator.final_, inches=inches,
+                      save_dir=lp_final_save_dir)
+    # plot_bd_mvmm_opt_history(estimator=estimator, save_dir=opt_diag_dir)
+
+    # else:
+    #     lp_save_dir = make_and_get_dir(opt_diag_dir, 'log_pen_mvmm')
+    #     plot_mvmm(estimator, inches=inches, save_dir=lp_save_dir)
 
 
 # save selected models

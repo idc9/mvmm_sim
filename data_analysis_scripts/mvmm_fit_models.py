@@ -124,8 +124,8 @@ view_gmm_config['random_state'] = sample_seed(rng)
 # cat_gmm_config = deepcopy(base_gmm_config)
 # cat_gmm_config['random_state'] = sample_seed(rng)
 
-full_mvmm_config = full_mvmm_from_args(args)
-full_mvmm_config['random_state'] = sample_seed(rng)
+# full_mvmm_config = full_mvmm_from_args(args)
+# full_mvmm_config['random_state'] = sample_seed(rng)
 
 log_pen_config = ts_log_pen_mvmm_from_args(args)
 log_pen_config['two_stage']['random_state'] = sample_seed(rng)
@@ -147,10 +147,10 @@ if args.n_blocks_seq == 'default':
 
 else:
     max_n_blocks = int(args.n_blocks_seq)
-    n_blocks = np.arange(2, max_n_blocks + 1)  # full MVMM takes care of 1 block
+    n_blocks = np.arange(1, max_n_blocks + 1)
 
 mvmm_view_config = {'base_gmm_config': base_gmm_config,
-                    'full_mvmm_config': full_mvmm_config,
+                    # 'full_mvmm_config': full_mvmm_config,
                     'log_pen_config': log_pen_config,
                     'bd_config': bd_config,
                     # 'spect_pen_config': spect_pen_config,
@@ -176,7 +176,7 @@ reg_covar = {}
 for v in range(n_views):
     reg = default_cov_regularization(X=view_data[v], mult=args.reg_covar_mult)
 
-    models['full_mvmm'].base_view_models[v].set_params(reg_covar=reg)
+    # models['full_mvmm'].base_view_models[v].set_params(reg_covar=reg)
 
     models['bd_mvmm'].base_estimator.base_start.base_view_models[v].\
         set_params(reg_covar=reg)
@@ -204,18 +204,18 @@ for v in range(n_views):
 runtimes = {}
 
 # fit model
-start_time = time()
-models['full_mvmm'].fit(view_data)
+# start_time = time()
+# models['full_mvmm'].fit(view_data)
 
-full_runtime = time() - start_time
-res_writer.write('fitting full mvmm took {:1.2f} seconds'.
-                 format(full_runtime))
+# full_runtime = time() - start_time
+# res_writer.write('fitting full mvmm took {:1.2f} seconds'.
+#                  format(full_runtime))
 
-runtimes['full_mvmm'] = full_runtime
+# runtimes['full_mvmm'] = full_runtime
 
-full_model_sel_scores = \
-    unsupervised_cluster_scores(X=view_data, estimator=models['full_mvmm'],
-                                measures=mvmm_view_config['metrics2compute'])
+# full_model_sel_scores = \
+#     unsupervised_cluster_scores(X=view_data, estimator=models['full_mvmm'],
+#                                 measures=mvmm_view_config['metrics2compute'])
 
 
 if 'bd_mvmm' not in to_exclude:
@@ -244,7 +244,7 @@ else:
 
 
 dump({'models': models,
-      'full_model_sel_scores': full_model_sel_scores,
+      # 'full_model_sel_scores': full_model_sel_scores,
       'runtimes': runtimes,
       'n_view_components': args.n_view_comps,
       'args': args,

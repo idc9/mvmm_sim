@@ -31,7 +31,11 @@ def get_bd_mvmm_model_sel(mvmm_results, select_metric='bic',
 
         data = fit_data[view_comp_idx]
         bd_models = data['models']['bd_mvmm']
-        full_model = data['models']['full_mvmm']
+
+        if 'full_mvmm' in data['models'].keys():
+            full_model = data['models']['full_mvmm']
+        else:
+            full_model = None
 
         model_scores_measures = bd_models.model_sel_scores_.columns.values
 
@@ -74,24 +78,25 @@ def get_bd_mvmm_model_sel(mvmm_results, select_metric='bic',
         # Full mvmm #
         #############
 
-        comm_mat_est = get_comm_mat(full_model.weights_mat_ > zero_thresh)
-        n_blocks_est = get_n_blocks(comm_mat_est)
+        if full_model is not None:
+            comm_mat_est = get_comm_mat(full_model.weights_mat_ > zero_thresh)
+            n_blocks_est = get_n_blocks(comm_mat_est)
 
-        n_comp_est = (full_model.weights_mat_ > zero_thresh).sum()
+            n_comp_est = (full_model.weights_mat_ > zero_thresh).sum()
 
-        res = {'model': 'full',
-               'view_comp_idx': view_comp_idx,
-               # 'bic': data['full_model_sel_scores']['bic'],
-               'n_blocks_req': 1,
-               'n_blocks_est': n_blocks_est,
-               'n_comp_est': n_comp_est,
-               'n_view_comp': n_view_comp_seq[view_comp_idx]
-               }
+            res = {'model': 'full',
+                   'view_comp_idx': view_comp_idx,
+                   # 'bic': data['full_model_sel_scores']['bic'],
+                   'n_blocks_req': 1,
+                   'n_blocks_est': n_blocks_est,
+                   'n_comp_est': n_comp_est,
+                   'n_view_comp': n_view_comp_seq[view_comp_idx]
+                   }
 
-        for measure in model_scores_measures:
-            res[measure] = data['full_model_sel_scores'][measure]
+            for measure in model_scores_measures:
+                res[measure] = data['full_model_sel_scores'][measure]
 
-        model_sel_df.append(res)
+            model_sel_df.append(res)
 
     model_sel_df = pd.DataFrame(model_sel_df)
 
@@ -151,7 +156,9 @@ def get_log_pen_mvmm_model_sel(mvmm_results, select_metric='bic',
 
         data = fit_data[view_comp_idx]
         log_pen_models = data['models']['log_pen_mvmm']
-        full_model = data['models']['full_mvmm']
+
+        if 'full_mvmm' in data['models'].keys():
+            full_model = data['models']['full_mvmm']
 
         model_scores_measures = log_pen_models.model_sel_scores_.columns.values
 
@@ -191,23 +198,24 @@ def get_log_pen_mvmm_model_sel(mvmm_results, select_metric='bic',
         # Full mvmm #
         #############
 
-        comm_mat_est = get_comm_mat(full_model.weights_mat_ > zero_thresh)
-        n_blocks_est = get_n_blocks(comm_mat_est)
+        if full_model is not None:
+            comm_mat_est = get_comm_mat(full_model.weights_mat_ > zero_thresh)
+            n_blocks_est = get_n_blocks(comm_mat_est)
 
-        n_comp_est = (full_model.weights_mat_ > zero_thresh).sum()
+            n_comp_est = (full_model.weights_mat_ > zero_thresh).sum()
 
-        res = {'model': 'full',
-               'view_comp_idx': view_comp_idx,
-               # 'bic': data['full_model_sel_scores']['bic'],
-               'n_blocks_est': n_blocks_est,
-               'n_comp_est': n_comp_est,
-               'n_view_comp': n_view_comp_seq[view_comp_idx]
-               }
+            res = {'model': 'full',
+                   'view_comp_idx': view_comp_idx,
+                   # 'bic': data['full_model_sel_scores']['bic'],
+                   'n_blocks_est': n_blocks_est,
+                   'n_comp_est': n_comp_est,
+                   'n_view_comp': n_view_comp_seq[view_comp_idx]
+                   }
 
-        for measure in model_scores_measures:
-            res[measure] = data['full_model_sel_scores'][measure]
+            for measure in model_scores_measures:
+                res[measure] = data['full_model_sel_scores'][measure]
 
-        model_sel_df.append(res)
+            model_sel_df.append(res)
 
     model_sel_df = pd.DataFrame(model_sel_df)
 
