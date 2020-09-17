@@ -462,7 +462,7 @@ for select_measure, model in product(['bic', 'aic'], ['bd_mvmm',
 
             exper_df = df.query("n_samples == @n_samples").\
                 query("mc_index == @mc_index")
-            plt.plot(exper_df['n_blocks_est'], exper_df['bic'],
+            plt.plot(exper_df[tune_param], exper_df['bic'],
                      marker='.', color='black')
             plt.ylabel(measure_labels[select_measure])
             plt.xlabel(tune_param_labels[tune_param])
@@ -480,7 +480,6 @@ for select_measure, model in product(['bic', 'aic'], ['bd_mvmm',
                       '{}_model_selection_n={}.png'.format(select_measure,
                                                            n_samples)))
 
-1 / 0
 ##############################
 # tune grid, start vs. final #
 ##############################
