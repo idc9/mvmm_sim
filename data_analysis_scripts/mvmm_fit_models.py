@@ -18,7 +18,6 @@ from mvmm_sim.utils import sample_seed
 from mvmm_sim.simulation.utils import make_and_get_dir
 # from mvmm.simulation.opt_viz import plot_loss_history
 # from mvmm.viz_utils import set_xaxis_int_ticks
-from mvmm_sim.clustering_measures import unsupervised_cluster_scores
 from mvmm_sim.simulation.submit.bayes import bayes_submit, bayes_parser
 from mvmm_sim.simulation.utils import format_mini_experiment
 from mvmm_sim.simulation.from_args import add_parsers, \
@@ -67,7 +66,6 @@ parser = bayes_parser(parser)
 args = parser.parse_args()
 bayes_submit(args)
 args = format_mini_experiment(args)
-
 
 # stub = 'mvmm_fitting_{}_{}'.format(args.n_comp_v0, args.n_comp_v1)
 stub = 'mvmm_fitting'
@@ -124,8 +122,8 @@ view_gmm_config['random_state'] = sample_seed(rng)
 # cat_gmm_config = deepcopy(base_gmm_config)
 # cat_gmm_config['random_state'] = sample_seed(rng)
 
-# full_mvmm_config = full_mvmm_from_args(args)
-# full_mvmm_config['random_state'] = sample_seed(rng)
+full_mvmm_config = full_mvmm_from_args(args)
+full_mvmm_config['random_state'] = sample_seed(rng)
 
 log_pen_config = ts_log_pen_mvmm_from_args(args)
 log_pen_config['two_stage']['random_state'] = sample_seed(rng)
@@ -147,10 +145,11 @@ if args.n_blocks_seq == 'default':
 
 else:
     max_n_blocks = int(args.n_blocks_seq)
+    max_n_blocks = min(min(args.n_view_comps), max_n_blocks)
     n_blocks = np.arange(1, max_n_blocks + 1)
 
 mvmm_view_config = {'base_gmm_config': base_gmm_config,
-                    # 'full_mvmm_config': full_mvmm_config,
+                    'full_mvmm_config': full_mvmm_config,
                     'log_pen_config': log_pen_config,
                     'bd_config': bd_config,
                     # 'spect_pen_config': spect_pen_config,
@@ -203,6 +202,7 @@ for v in range(n_views):
 
 runtimes = {}
 
+del models['full_mvmm']
 # fit model
 # start_time = time()
 # models['full_mvmm'].fit(view_data)
@@ -216,7 +216,6 @@ runtimes = {}
 # full_model_sel_scores = \
 #     unsupervised_cluster_scores(X=view_data, estimator=models['full_mvmm'],
 #                                 measures=mvmm_view_config['metrics2compute'])
-
 
 if 'bd_mvmm' not in to_exclude:
     start_time = time()

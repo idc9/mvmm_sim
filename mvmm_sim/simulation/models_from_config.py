@@ -79,7 +79,7 @@ def get_single_view_models(cat_gmm_config=None, view_gmm_config=None,
 
 
 def get_mvmms(n_view_components,
-              base_gmm_config, full_mvmm_config=None,
+              base_gmm_config, full_mvmm_config,
               log_pen_config=None, bd_config=None,
               spect_pen_config=None,
               n_blocks='default',
@@ -95,15 +95,14 @@ def get_mvmms(n_view_components,
     # Full MVMM #
     #############
 
-    if full_mvmm_config is not None:
-        base_view_models = \
-            [GaussianMixture(n_components=n_view_components[v],
-                             **base_gmm_config) for v in range(n_views)]
+    base_view_models = \
+        [GaussianMixture(n_components=n_view_components[v],
+                         **base_gmm_config) for v in range(n_views)]
 
-        full_mvmm = MVMM(base_view_models=base_view_models,
-                         **full_mvmm_config)
+    full_mvmm = MVMM(base_view_models=base_view_models,
+                     **full_mvmm_config)
 
-        models['full_mvmm'] = full_mvmm
+    models['full_mvmm'] = full_mvmm
 
     ################
     # log pen MVMM #

@@ -66,12 +66,12 @@ python simulation_scripts/agg_sim_results --sim_name sparse_pi__1__1
 ######################
 
 # mouse ET analysis
-sh data_analysis_scripts/mouse_et_run_analysis.sh BRCA icluster
+sh data_analysis_scripts/mouse_et_run_analysis.sh
 
 # single view analysis on BRCA data with icluster features
-sh data_analysis_scripts/tcga_single_view_analysis.sh BRCA icluster
+sh data_analysis_scripts/tcga_single_view_analysis.sh BRCA
 
 # multi-vew analysis on BRCA data with icluster features with RNA vs. XXX
-sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA icluster mi_rna
-sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA icluster dna_meth
-sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA icluster cp
+sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA mi_rna
+sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA dna_meth
+sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA cp

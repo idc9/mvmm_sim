@@ -232,7 +232,7 @@ def bd_mvmm_parser(parser):
     parser.add_argument('--bd_init_pen_use_bipt_sp',
                         action='store_true', default=False,
                         help='Use spectral bi-partitioning for'
-                             'eval pen itit guess.')
+                             'eval pen init guess.')
 
     parser.add_argument('--bd_init_pen_K',
                         action='store_true', default='default',

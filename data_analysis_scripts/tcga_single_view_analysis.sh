@@ -6,7 +6,7 @@ v2='dna_meth'
 v3='cp'
 
 cancer_type=$1 # 'BRCA'
-feat_list=$2 #'icluster'
+feat_list=icluster
 
 pca=true
 
