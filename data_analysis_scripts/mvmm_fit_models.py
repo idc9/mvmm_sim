@@ -218,6 +218,10 @@ del models['full_mvmm']
 #                                 measures=mvmm_view_config['metrics2compute'])
 
 if 'bd_mvmm' not in to_exclude:
+    # TODO: do we want this
+    # models['bd_mvmm'].backend = 'multiprocessing'
+    models['bd_mvmm'].verbose = 50
+
     start_time = time()
     models['bd_mvmm'].fit(view_data)
 

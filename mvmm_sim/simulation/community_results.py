@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from mvmm.multi_view.block_diag.graph.bipt_community import get_comm_mat
+from mvmm.multi_view.block_diag.graph.bipt_community import get_block_mat
 from mvmm_sim.simulation.cluster_report import cluster_report
 
 
@@ -58,7 +58,7 @@ def get_y_comm_pred_restrict_comm(mvmm, view_data, comm_mat):
 def get_comm_pred_summary(Pi_true, Y_true, mvmm, view_data, comm_mat_est):
 
     # extract true communities
-    comm_mat_true = get_comm_mat(Pi_true > 0)
+    comm_mat_true = get_block_mat(Pi_true > 0)
     # comm_mat_true[np.isnan(comm_mat_true)] = -1
     y_comm_true = [comm_mat_true[Y_true[i, 0], Y_true[i, 1]]
                    for i in range(Y_true.shape[0])]

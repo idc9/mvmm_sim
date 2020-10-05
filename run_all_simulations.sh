@@ -2,7 +2,6 @@
 
 # This script runs all the simulations and data analyses from (Carmichael, 2020). It assumes you first run git clone www.github.com/idc9/mvmm_sim and cd into the cloned directory.
 
-
 #########
 # setup #
 #########
@@ -16,13 +15,15 @@ pip install .
 # install required packages
 # pip install mvmm==0.0.2
 pip install -r requirements.txt
+
 # TODO: specify tag
+# Manually install a couple packages
 # pip install git+https://github.com/idc9/explore.git@sometag
-# pip install git+https://github.com/pca/pca.git@sometag
+# pip install git+https://github.com/idc9/ya_pca.git@sometag
 
 
+# uncomment this line to test the code with a small scale simulation
 # python simulation_scripts/submit_full_sim.py --pi_name beads_2_5 --mini --sim_name test_run
-# exit
 
 ##############################
 # Synthetic data simulations #
@@ -69,9 +70,9 @@ python simulation_scripts/agg_sim_results --sim_name sparse_pi__1__1
 sh data_analysis_scripts/mouse_et_run_analysis.sh
 
 # single view analysis on BRCA data with icluster features
-sh data_analysis_scripts/tcga_single_view_analysis.sh BRCA
+sh data_analysis_scripts/tcga_single_view_analysis.sh
 
 # multi-vew analysis on BRCA data with icluster features with RNA vs. XXX
-sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA mi_rna
-sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA dna_meth
-sh data_analysis_scripts/tcga_mvmm_analysis.sh BRCA cp
+sh data_analysis_scripts/tcga_mvmm_analysis.sh mi_rna
+sh data_analysis_scripts/tcga_mvmm_analysis.sh dna_meth
+sh data_analysis_scripts/tcga_mvmm_analysis.sh cp

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from mvmm.multi_view.block_diag.graph.bipt_community import get_comm_mat
+from mvmm.multi_view.block_diag.graph.bipt_community import get_block_mat
 from mvmm.clustering_measures import MEASURE_MIN_GOOD
 
 from mvmm_sim.simulation.run_sim import get_n_blocks
@@ -52,7 +52,7 @@ def get_bd_mvmm_model_sel(mvmm_results, select_metric='bic',
             # est n_blocks
             D_est = est.final_.bd_weights_
             zero_thresh = est.final_.zero_thresh
-            comm_mat_est = get_comm_mat(D_est > zero_thresh)
+            comm_mat_est = get_block_mat(D_est > zero_thresh)
             n_blocks_est = get_n_blocks(comm_mat_est)
 
             n_comp_est = (D_est > zero_thresh).sum()
@@ -79,7 +79,7 @@ def get_bd_mvmm_model_sel(mvmm_results, select_metric='bic',
         #############
 
         if full_model is not None:
-            comm_mat_est = get_comm_mat(full_model.weights_mat_ > zero_thresh)
+            comm_mat_est = get_block_mat(full_model.weights_mat_ > zero_thresh)
             n_blocks_est = get_n_blocks(comm_mat_est)
 
             n_comp_est = (full_model.weights_mat_ > zero_thresh).sum()
@@ -174,7 +174,7 @@ def get_log_pen_mvmm_model_sel(mvmm_results, select_metric='bic',
 
             Pi_est = est.final_.weights_mat_
             zero_thresh = 0
-            comm_mat_est = get_comm_mat(Pi_est > zero_thresh)
+            comm_mat_est = get_block_mat(Pi_est > zero_thresh)
             n_blocks_est = get_n_blocks(comm_mat_est)
 
             n_comp_est = (Pi_est > zero_thresh).sum()
@@ -199,7 +199,7 @@ def get_log_pen_mvmm_model_sel(mvmm_results, select_metric='bic',
         #############
 
         if full_model is not None:
-            comm_mat_est = get_comm_mat(full_model.weights_mat_ > zero_thresh)
+            comm_mat_est = get_block_mat(full_model.weights_mat_ > zero_thresh)
             n_blocks_est = get_n_blocks(comm_mat_est)
 
             n_comp_est = (full_model.weights_mat_ > zero_thresh).sum()

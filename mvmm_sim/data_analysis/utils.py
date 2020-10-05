@@ -51,6 +51,9 @@ def load_fitted_mvmms(save_dir):
     fpaths = glob(save_dir + '/mvmm_*')
     fit_data = [load(fpath) for fpath in fpaths]
 
+    if len(fpaths) == 0:
+        raise ValueError("No fit models detected in {}".format(save_dir))
+
     n_view_components = [res['n_view_components'] for res in fit_data]
 
     return {'fit_data': fit_data,

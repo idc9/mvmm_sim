@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import os
 import seaborn as sns
 
-from mvmm.multi_view.block_diag.graph.linalg import eigh_sym_laplacian_bp
+from mvmm.multi_view.block_diag.graph.linalg import eigh_Lsym_bp
 from mvmm.multi_view.block_diag.graph.bipt_community import community_summary
 from mvmm_sim.simulation.gif_utils import get_frame_iter, make_gif
 from mvmm_sim.simulation.opt_viz import plot_loss_history
@@ -23,7 +23,7 @@ def get_plot_pi_from_idx(sp_mvmm):
             title = 'Penalty = {:1.2f}'.format(estimator.eval_pen_base)
             zero_thresh = estimator.zero_thresh
 
-        evals, _ = eigh_sym_laplacian_bp(Pi)
+        evals, _ = eigh_Lsym_bp(Pi)
 
         comm_summary, Pi_comm = community_summary(Pi, zero_thresh=zero_thresh)
         n_blocks = comm_summary['n_communities']

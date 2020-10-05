@@ -4,7 +4,7 @@ import numpy as np
 
 
 from mvmm.multi_view.block_diag.graph.bipt_community import community_summary
-from mvmm.multi_view.block_diag.graph.linalg import eigh_sym_laplacian_bp, \
+from mvmm.multi_view.block_diag.graph.linalg import eigh_Lsym_bp, \
     get_unnorm_laplacian_bp
 from mvmm.linalg_utils import eigh_wrapper
 
@@ -18,7 +18,7 @@ def summarize_bd(D, n_blocks, zero_thresh=None, lap='sym'):
 
     plt.figure(figsize=(8, 4))
     if lap == 'sym':
-        evals = eigh_sym_laplacian_bp(D)[0]
+        evals = eigh_Lsym_bp(D)[0]
     else:
         Lun = get_unnorm_laplacian_bp(D)
         evals = eigh_wrapper(Lun)[0]

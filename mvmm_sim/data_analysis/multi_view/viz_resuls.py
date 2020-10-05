@@ -7,7 +7,7 @@ import seaborn as sns
 import numpy as np
 
 from mvmm.multi_view.block_diag.graph.bipt_community import community_summary
-from mvmm.multi_view.block_diag.graph.linalg import eigh_sym_laplacian_bp
+from mvmm.multi_view.block_diag.graph.linalg import eigh_Lsym_bp
 from mvmm.clustering_measures import MEASURE_MIN_GOOD
 from mvmm.linalg_utils import pca
 
@@ -137,21 +137,28 @@ def plot_bd_mvmm(mvmm, inches=8, save_dir=None):
     bd_weights = mvmm.bd_weights_
     zero_thresh = mvmm.zero_thresh
     summary, Pi_comm = community_summary(bd_weights, zero_thresh=zero_thresh)
-    bd_weights_symlap_spec = eigh_sym_laplacian_bp(bd_weights)[0]
+    bd_weights_symlap_spec = eigh_Lsym_bp(bd_weights)[0]
 
     # initial BD weights
     bd_weights_init = mvmm.opt_data_['adpt_opt_data']['adapt_pen_history']['opt_data'][0]['history']['init_params']['bd_weights']
-    bd_weights_init_symlap_spec = eigh_sym_laplacian_bp(bd_weights_init)[0]
+    bd_weights_init_symlap_spec = eigh_Lsym_bp(bd_weights_init)[0]
 
     # optimization history
     adpt_history = mvmm.opt_data_['adpt_opt_data']['adapt_pen_history']['opt_data']
 
-    n_steps = [len(adpt_history[i]['history']['raw_eval_sum'])
-               for i in range(len(adpt_history))]
-    n_steps_cumsum = np.cumsum(n_steps)
+    if 'raw_eval_sum' in adpt_history[0]['history']:
+        n_steps = [len(adpt_history[i]['history']['raw_eval_sum'])
+                   for i in range(len(adpt_history))]
+        n_steps_cumsum = np.cumsum(n_steps)
 
-    raw_eval_sum = np.concatenate([adpt_history[i]['history']['raw_eval_sum']
-                                  for i in range(len(adpt_history))])
+        raw_eval_sum = \
+            np.concatenate([adpt_history[i]['history']['raw_eval_sum']
+                           for i in range(len(adpt_history))])
+
+    else:
+        raw_eval_sum = None
+        n_steps = None
+        n_steps_cumsum = None
 
     obs_nll = np.concatenate([adpt_history[i]['history']['obs_nll']
                               for i in range(len(adpt_history))])
@@ -207,16 +214,18 @@ def plot_bd_mvmm(mvmm, inches=8, save_dir=None):
     ##################################
     # Number of steps for each stage #
     ##################################
-    plt.figure(figsize=(inches, inches))
-    idxs = np.arange(1, len(n_steps) + 1)
-    plt.plot(idxs, n_steps, marker='.')
-    plt.ylim(0)
-    plt.ylabel("Number of steps")
-    plt.xlabel("Adaptive stage")
 
-    if save_dir is not None:
-        fpath = join(save_dir, 'n_steps.png')
-        save_fig(fpath)
+    if n_steps is not None:
+        plt.figure(figsize=(inches, inches))
+        idxs = np.arange(1, len(n_steps) + 1)
+        plt.plot(idxs, n_steps, marker='.')
+        plt.ylim(0)
+        plt.ylabel("Number of steps")
+        plt.xlabel("Adaptive stage")
+
+        if save_dir is not None:
+            fpath = join(save_dir, 'n_steps.png')
+            save_fig(fpath)
 
     ###########################
     # Obs NLL for entire path #
@@ -231,17 +240,18 @@ def plot_bd_mvmm(mvmm, inches=8, save_dir=None):
     #########################
     # Evals for entire path #
     #########################
-    plt.figure(figsize=[inches, inches])
-    plt.plot(np.log10(raw_eval_sum), marker='.')
-    plt.ylabel('log10(sum smallest evals)')
-    plt.xlabel('step')
-    plt.title('Eigenvalue history (entire path)')
-    for s in n_steps_cumsum:
-        plt.axvline(s - 1, color='grey')
+    if raw_eval_sum is not None:
+        plt.figure(figsize=[inches, inches])
+        plt.plot(np.log10(raw_eval_sum), marker='.')
+        plt.ylabel('log10(sum smallest evals)')
+        plt.xlabel('step')
+        plt.title('Eigenvalue history (entire path)')
+        for s in n_steps_cumsum:
+            plt.axvline(s - 1, color='grey')
 
-    if save_dir is not None:
-        fpath = join(save_dir, 'path_evals.png')
-        save_fig(fpath)
+        if save_dir is not None:
+            fpath = join(save_dir, 'path_evals.png')
+            save_fig(fpath)
 
     ###########################
     # Losses for each segment #
@@ -299,11 +309,11 @@ def plot_log_pen_mvmm(mvmm, inches=8, save_dir=None):
     zero_thresh = 1e-10  # not sure if we need this
 
     summary, Pi_comm = community_summary(Pi, zero_thresh=zero_thresh)
-    Pi_symlap_spec = eigh_sym_laplacian_bp(Pi)[0]
+    Pi_symlap_spec = eigh_Lsym_bp(Pi)[0]
 
     if 'init_params' in mvmm.opt_data_['history']:
         Pi_init = mvmm.opt_data_['history']['weights'].reshape(Pi.shape)  # TODO: check this
-        Pi_init_symlap_spec = eigh_sym_laplacian_bp(Pi_init)[0]
+        Pi_init_symlap_spec = eigh_Lsym_bp(Pi_init)[0]
     else:
         Pi_init = None
 

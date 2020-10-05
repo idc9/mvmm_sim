@@ -71,7 +71,8 @@ plot_top_clust_ephys_curves(cluster_super_means,
 save_fig(join(ephys_viz_dir, 'ephys_curves_top_clust.png'))
 
 # plot each (non-trival) cluster
-non_trivial_clusters = y_cnts[y_cnts >= 5].index.values
+# non_trivial_clusters = y_cnts[y_cnts >= 5].index.values
+non_trivial_clusters = y_cnts[y_cnts >= 0].index.values
 save_dir = make_and_get_dir(ephys_viz_dir, 'cluster_curves')
 for cl_idx in non_trivial_clusters:
 

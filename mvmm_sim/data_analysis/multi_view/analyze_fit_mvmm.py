@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from mvmm.multi_view.BlockDiagMVMM import BlockDiagMVMM
 from mvmm.multi_view.LogPenMVMM import LogPenMVMM
 from mvmm.multi_view.block_diag.graph.bipt_community import \
-    community_summary, get_comm_mat
+    community_summary, get_block_mat
 
 from mvmm_sim.simulation.community_results import get_y_comm_pred_out_comm, \
     get_y_comm_pred_restrict_comm
@@ -292,7 +292,7 @@ def get_mvmm_interpret_data(model, view_data,
         zero_thresh = 0
 
     # get block s of the matrix
-    block_mat = get_comm_mat(Pi > zero_thresh)
+    block_mat = get_block_mat(Pi > zero_thresh)
     block_summary, Pi_block = community_summary(Pi, zero_thresh=zero_thresh)
     n_blocks_est = block_summary['n_communities']
     # block_labels = ['block_{}'.format(b + 1) for b in range(n_blocks_est)]

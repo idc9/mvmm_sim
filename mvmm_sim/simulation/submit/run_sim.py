@@ -14,7 +14,7 @@ from warnings import simplefilter
 from mvmm.multi_view.utils import view_labs_to_overall,\
     get_n_comp
 from mvmm.multi_view.block_diag.graph.bipt_community import community_summary,\
-    get_comm_mat
+    get_block_mat
 from mvmm.utils import get_seeds
 from mvmm.multi_view.TwoStage import TwoStage
 from mvmm.BaseGridSearch import BaseGridSearch
@@ -429,7 +429,7 @@ def add_gs_results(results_df, sim_stub, model, model_name, dataset, view,
 
     # true communities
     # comm_mat_true[np.isnan(comm_mat_true)] = -1
-    comm_mat_true = get_comm_mat(Pi_true > 0)
+    comm_mat_true = get_block_mat(Pi_true > 0)
     res['true_n_communities'] = int(np.nanmax(comm_mat_true) + 1)
     # comm_true_tr = [comm_mat_true[Y_tr[i, 0], Y_tr[i, 1]]
     #                 for i in range(Y_tr.shape[0])]
@@ -587,7 +587,7 @@ def add_gs_results(results_df, sim_stub, model, model_name, dataset, view,
 
             # get community matrix for block diagonal matrix
             if is_two_stage:
-                comm_mat_est = get_comm_mat(Pi_est > zero_thresh)
+                comm_mat_est = get_block_mat(Pi_est > zero_thresh)
 
                 res['est_n_communities'] = int(np.nanmax(comm_mat_est) + 1)
 
@@ -631,7 +631,7 @@ def add_gs_results(results_df, sim_stub, model, model_name, dataset, view,
             ######################
 
             # predicted communities
-            # comm_mat_est = get_comm_mat(Pi_est > zero_thresh)
+            # comm_mat_est = get_block_mat(Pi_est > zero_thresh)
             # comm_mat_est[np.isnan(comm_mat_est)] = -1
             # res['est_n_communities'] = int(np.nanmax(comm_mat_est) + 1)
 
@@ -694,7 +694,7 @@ def add_gs_results(results_df, sim_stub, model, model_name, dataset, view,
                                             means_true, means_est)
 
                 # n_communities
-                comm_mat_est = get_comm_mat(Pi_est > zero_thresh)
+                comm_mat_est = get_block_mat(Pi_est > zero_thresh)
                 comm_mat_est[np.isnan(comm_mat_est)] = -1
                 res['start_est_n_communities'] = int(np.nanmax(comm_mat_est) + 1)
 

@@ -3,31 +3,23 @@
 v0='rna'
 # v1=mi_rna, cp, dna_meth
 
-cancer_type=$1 # 'BRCA'
+cancer_type='BRCA'
 feat_list=icluster  # always use the icluster feature list
 
-v1=$2  # specify the second view
-node=$3
+v1=$1  # specify the second view
+node=$2  # cluster node to use, you can probably ignore this
 
-n_init=1
+n_init=20
 init_params=kmeans
 
 n_blocks_seq=10
 
-
 # check argument supplied
 if [ -z "$1" ]
-  then
-    echo "No argument supplied for cancer type"
-    exit
-fi
-
-if [ -z "$2" ]
   then
     echo "No argument supplied for the second view"
     exit
 fi
-
 
 # set working directory
 cwd=$(pwd)
@@ -69,7 +61,6 @@ then
     cp_bic_ncomp=32
 fi
 
-
 # set view n comp to BIC selected n components
 n_comp_v0="$rna_bic_ncomp"
 
@@ -96,13 +87,9 @@ fi
 ################
 # the commented out code was used for the cluster Iain used to run the experiments
 
-# python mvmm_n_comp_submitter.py --results_dir "$results_dir" --fpaths "$fpath_v0" "$fpath_v1" --min_n_view_comps "$min_ncomp_v0" "$min_ncomp_v1" --max_n_view_comps "$max_ncomp_v0" "$max_ncomp_v1" --n_init "$n_init" --gmm_init_params "$init_params" --bd_start_max_n_steps 10 --bd_final_max_n_steps 100 --bd_init_pen_use_bipt_sp --n_jobs -1 --queue w-bigmem.q --submit --mem 8G --node "$node"
-
-python mvmm_fit_models.py --results_dir "$results_dir" --fpaths "$fpath_v0" "$fpath_v1" --n_view_comps "$n_comp_v0" "$n_comp_v1" --n_blocks_seq "$n_blocks_seq" --n_init "$n_init" --gmm_init_params "$init_params" --bd_start_max_n_steps 10 --bd_final_max_n_steps 100 --bd_init_pen_use_bipt_sp --exclude_log_pen_mvmm --n_jobs -1 --queue w-bigmem.q --submit --mem 50G --node "$node"
+python mvmm_fit_models.py --results_dir "$results_dir" --fpaths "$fpath_v0" "$fpath_v1" --n_view_comps "$n_comp_v0" "$n_comp_v1" --n_blocks_seq "$n_blocks_seq" --n_init "$n_init" --gmm_init_params "$init_params" --bd_start_max_n_steps 10 --bd_final_max_n_steps 200 --exclude_log_pen_mvmm --n_jobs -1 # --queue w-bigmem.q --submit --mem 50G --node "$node"
 
 
-# python mvmm_model_selection.py --results_dir "$results_dir"
+python mvmm_model_selection.py --results_dir "$results_dir"
 
-# python mvmm_interpret.py --results_dir "$results_dir" --fpaths "$fpath_v0" "$fpath_v1" --vars2compare_fpath "$vars2compare_fpath" --survival_fpath "$metadata_fpath" --duration_col "$duration_col" --event_col "$event_col"
-
-# python tcga_survival.py --results_dir "$results_dir" --fpaths "$fpath_v0" "$fpath_v1" --metadata_fpath "$metadata_fpath" --duration_col "$duration_col" --event_col "$event_col"
+python mvmm_interpret.py --results_dir "$results_dir" --fpaths "$fpath_v0" "$fpath_v1" --vars2compare_fpath "$vars2compare_fpath" --survival_fpath "$metadata_fpath" --duration_col "$duration_col" --event_col "$event_col"

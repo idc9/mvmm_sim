@@ -135,7 +135,7 @@ for model_key in mvmm_model_keys:
                                   dataset_names=dataset_names,
                                   stub=model_key,
                                   n_top_samples=5,
-                                  clust_size_min=5)
+                                  clust_size_min=0)
 
     ###############
     # joint level #
@@ -275,12 +275,10 @@ for model_key in mvmm_model_keys:
         # TODO: label survival variable!
 
     # save survival
-    # dump({'joint_survival': out['joint_survival'],
-    #       'block': out['block_survival'],
-    #       'view_survival': out['view_survival']},
-    #      filename=join(save_dir, 'survival'))
-    # plot pca
-    # TODO: mabye do PCa
+    dump({'joint_survival': out['joint_survival'],
+          'block': out['block_survival'],
+          'view_survival': out['view_survival']},
+         filename=join(save_dir, 'survival'))
 
     ###########
     # Plot Pi #
