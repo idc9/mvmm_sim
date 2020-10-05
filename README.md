@@ -9,11 +9,15 @@ To run all the simulations do the following (note you have to write in a couple 
 
 ```
 git clone https://github.com/idc9/mvmm_sim@SOMETAG
-
-# change paths in mvmm_sim/simulation/Paths.py
-
 pip install .
 
+# before running the simulations you should should change the paths in the following files
+# mvmm_sim/simulation/Paths.py
+# data_analysis_scripts/tcga_single_view_analysis.sh
+# data_analysis_scripts/tcga_mvmm_analysis.sh
+# data_analysis_scripts/mouse_et_run_analysis.sh
+
+# run both the synthetic data simulations as well as the real data analysis
 sh run_all_simulations.sh
 ```
 
