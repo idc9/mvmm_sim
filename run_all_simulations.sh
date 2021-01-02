@@ -18,8 +18,8 @@ pip install -r requirements.txt
 
 # TODO: specify tag
 # Manually install a couple packages
-# pip install git+https://github.com/idc9/explore.git@sometag
-# pip install git+https://github.com/idc9/ya_pca.git@sometag
+pip install git+https://github.com/idc9/explore.git@v0.1
+pip install git+https://github.com/idc9/ya_pca.git@0.0.0
 
 
 # uncomment this line to test the code with a small scale simulation

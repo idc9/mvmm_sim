@@ -1,8 +1,8 @@
 # Simulations for multi-view mixture modeling paper
 
 
-The code in this repository reproduces the results of [(Carmichael, 2020)](TODO: LINK TO PAPER)
-
+The code in this repository reproduces the results of ["Learning Sparsity and Block Diagonal Structure in Multi-View
+Mixture Models"](https://arxiv.org/pdf/2012.15313.pdf).
 
 
 To run all the simulations do the following (note you have to write in a couple hard coded paths for where simulation output data should be saved!)
